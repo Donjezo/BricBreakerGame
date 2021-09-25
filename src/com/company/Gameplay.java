@@ -52,9 +52,42 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         g.fillRect(playerX,550,100,8);
 
 
+         //firorja
+        if(totalBricks <=0){
+            play = false;
+            ballXdir = 0;
+            ballYdir = 0;
+            g.setColor(Color.green);
+            g.setFont(new Font ("serif",Font.BOLD,30));
+            g.drawString("You Won, Scores: ",260,300);
+
+
+            g.setFont(new Font ("serif",Font.BOLD,20));
+            g.drawString("Press Enter to restart ",230,350);
+
+        }
+          //scores
+        g.setColor(Color.white);
+        g.setFont(new Font("serif",Font.BOLD,25));
+        g.drawString(""+score,590,30);
+
         //the ball
         g.setColor(Color.yellow);
         g.fillOval(ballposX,ballposY,20,20);
+
+        if(ballposY > 570){
+            play = false;
+            ballXdir = 0;
+            ballYdir = 0;
+            g.setColor(Color.red);
+            g.setFont(new Font ("serif",Font.BOLD,30));
+             g.drawString("Game Over, Scores: ",190,300);
+
+
+            g.setFont(new Font ("serif",Font.BOLD,20));
+            g.drawString("Press Enter to restart ",230,350);
+
+        }
 
         g.dispose();
     }
@@ -67,7 +100,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
             if(new Rectangle(ballposX,ballposY,20,20).intersects(new Rectangle(playerX,550,100,8))){
                ballYdir = -ballYdir;
             }
-            for(int i = 0; i <map.map.length;i++){
+            A:for(int i = 0; i <map.map.length;i++){
                 for(int j = 0; j<map.map[0].length ; j++){
                     if(map.map[i][j]>0){
                         int brickX = j* map.brickWidth + 80;
@@ -88,7 +121,9 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
                             }else {
                                 ballYdir = -ballYdir;
                             }
+                            break A;
                         }
+
                     }
                 }
             }
@@ -125,6 +160,20 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
                 playerX = 10;
             }else {
                 moveLeft();
+            }
+        }
+        if(e.getKeyCode() == KeyEvent.VK_ENTER){
+            if(!play){
+                play = true;
+                ballposX = 120;
+                ballposY = 350;
+                ballXdir = -1;
+                ballYdir = -2;
+                playerX = 310;
+                score = 0;
+                totalBricks  = 21;
+                map = new MapGenerator(3,7);
+                repaint();
             }
         }
 
